@@ -75,6 +75,9 @@ export default function LeftSidebar({
   // Gel sorting state
   const [gelSortType, setGelSortType] = useState<"color" | "number">("color");
   
+  // Stage type state
+  const [stageType, setStageType] = useState<"proscenium" | "thrust" | "arena">("proscenium");
+  
   // Filter assets based on search term
   const filteredLights = etcLights.filter(light => 
     light.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -436,6 +439,26 @@ export default function LeftSidebar({
             
             <div className="mb-4">
               <h4 className="text-sm font-medium mb-2">Stage Layout</h4>
+              
+              <div className="mb-3">
+                <Label htmlFor="stage-type" className="block text-sm mb-1">Stage Type</Label>
+                <Select
+                  value={stageType}
+                  onValueChange={(value: "proscenium" | "thrust" | "arena") => 
+                    setStageType(value)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select stage type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="proscenium">Proscenium (Traditional)</SelectItem>
+                    <SelectItem value="thrust">Thrust (3/4 Round)</SelectItem>
+                    <SelectItem value="arena">Arena (In the Round)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
               <Button 
                 className="w-full"
                 onClick={() => {
@@ -451,7 +474,7 @@ export default function LeftSidebar({
                     rotation: 0,
                     assetId: "stage-outline",
                     properties: {
-                      stageType: "proscenium"
+                      stageType: stageType
                     },
                   };
                   
