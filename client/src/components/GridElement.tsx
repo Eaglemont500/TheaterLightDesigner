@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Group, Rect, Line, Text, Transformer } from "react-konva";
 import { type Layer as LayerType } from "@shared/schema";
 
@@ -29,8 +29,8 @@ export const GridElement = ({ element, isSelected, onSelect, onChange, draggable
   const barColor = element.properties?.barColor || "#888888";
   const barWidth = element.properties?.barWidth || 2;
   
-  // Calculate grid lines based on spacing
-  const generateGridLines = () => {
+  // Calculate grid lines based on spacing - using useMemo for performance
+  const gridLines = useMemo(() => {
     const width = element.width || 800;
     const height = element.height || 400;
     const lines = [];
@@ -47,6 +47,7 @@ export const GridElement = ({ element, isSelected, onSelect, onChange, draggable
               points={[0, y, width, y]}
               stroke={barColor}
               strokeWidth={barWidth}
+              listening={false} // Disable event handling for performance
             />
           );
         }
@@ -65,6 +66,7 @@ export const GridElement = ({ element, isSelected, onSelect, onChange, draggable
               points={[x, 0, x, height]}
               stroke={barColor}
               strokeWidth={barWidth}
+              listening={false} // Disable event handling for performance
             />
           );
         }
@@ -72,7 +74,7 @@ export const GridElement = ({ element, isSelected, onSelect, onChange, draggable
     }
     
     return lines;
-  };
+  }, [element.width, element.height, direction, spacing, barColor, barWidth]);
   
   return (
     <>
@@ -126,7 +128,7 @@ export const GridElement = ({ element, isSelected, onSelect, onChange, draggable
         />
         
         {/* Grid lines */}
-        {generateGridLines()}
+        {gridLines}
         
         {/* Grid label */}
         <Text
@@ -169,8 +171,13 @@ export const CustomGridElement = ({ element, isSelected, onSelect, onChange, dra
     }
   }, [isSelected]);
 
-  // Get custom grid lines from properties
-  const customLines = element.properties?.lines || [];
+  // Get custom grid lines from properties with memoization
+  const customLines = useMemo(() => {
+    return (element.properties?.lines || []).map((line: {id: string, points: number[], color: string, width: number}) => ({
+      ...line,
+      listening: false // Disable event handling for performance
+    }));
+  }, [element.properties?.lines]);
   
   return (
     <>
@@ -224,7 +231,7 @@ export const CustomGridElement = ({ element, isSelected, onSelect, onChange, dra
         />
         
         {/* Custom-drawn grid lines */}
-        {customLines.map((line: any) => (
+        {customLines.map((line) => (
           <Line
             key={line.id}
             points={line.points}
@@ -233,6 +240,7 @@ export const CustomGridElement = ({ element, isSelected, onSelect, onChange, dra
             tension={0}
             lineCap="round"
             lineJoin="round"
+            listening={false}
           />
         ))}
         

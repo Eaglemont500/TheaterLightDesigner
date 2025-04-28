@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, memo } from "react";
 import { Stage, Layer, Group, Rect, Text, Transformer, Line, Circle } from "react-konva";
 import { nanoid } from "nanoid";
 import { type ProjectData, type Layer as LayerType } from "@shared/schema";
