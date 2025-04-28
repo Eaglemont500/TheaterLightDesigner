@@ -9,7 +9,8 @@ import {
   SaveIcon, 
   DownloadIcon,
   PlusIcon,
-  TrashIcon
+  TrashIcon,
+  Upload as UploadIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -211,6 +212,68 @@ export default function TheatricalLightingDesigner() {
       });
     }
   };
+  
+  const handleImportProject = () => {
+    try {
+      // Create file input element
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.json';
+      
+      fileInput.onchange = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files[0]) {
+          const file = target.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = (e) => {
+            try {
+              const result = e.target?.result;
+              if (typeof result === 'string') {
+                const importedData = JSON.parse(result);
+                
+                // Validate imported data against schema
+                const validatedData = ProjectDataSchema.parse(importedData);
+                
+                // Confirm with the user
+                if (confirm("Are you sure you want to import this project? Current project data will be replaced.")) {
+                  // Apply the imported data
+                  setProjectData(validatedData);
+                  
+                  // Reset project ID so it's saved as a new project
+                  localProjectIdRef.current = null;
+                  localStorage.removeItem("theatricalLighting_projectId");
+                  
+                  toast({
+                    title: "Project Imported",
+                    description: "The imported lighting design has been loaded successfully",
+                  });
+                }
+              }
+            } catch (error) {
+              console.error("Error parsing imported data:", error);
+              toast({
+                title: "Import Failed",
+                description: "The file could not be imported. Make sure it's a valid lighting design file.",
+                variant: "destructive",
+              });
+            }
+          };
+          
+          reader.readAsText(file);
+        }
+      };
+      
+      // Trigger file input click
+      fileInput.click();
+    } catch (error) {
+      toast({
+        title: "Import Failed",
+        description: "There was an error importing the lighting design",
+        variant: "destructive",
+      });
+    }
+  };
 
   const activeLayer = projectData.layers.find(layer => layer.id === projectData.activeLayerId);
   const activeLayerIndex = projectData.layers.findIndex(layer => layer.id === projectData.activeLayerId);
@@ -245,6 +308,14 @@ export default function TheatricalLightingDesigner() {
           <Button 
             variant="secondary" 
             size="sm" 
+            onClick={handleImportProject}
+            className="flex items-center"
+          >
+            <UploadIcon className="mr-1 h-4 w-4" /> Import
+          </Button>
+          <Button 
+            variant="secondary" 
+            size="sm" 
             onClick={handleExportProject}
             className="flex items-center"
           >
@@ -274,6 +345,8 @@ export default function TheatricalLightingDesigner() {
               handleUpdateLayers(updatedLayers);
             }
           }}
+          onImport={handleImportProject}
+          onExport={handleExportProject}
         />
 
         {/* Main Canvas Area */}

@@ -35,6 +35,8 @@ interface LeftSidebarProps {
   onUpdateGridSettings: (settings: GridSettings) => void;
   activeLayer: Layer | undefined;
   onAddElement: (element: Layer["elements"][0]) => void;
+  onImport?: () => void;
+  onExport?: () => void;
 }
 
 export default function LeftSidebar({
@@ -45,7 +47,9 @@ export default function LeftSidebar({
   gridSettings,
   onUpdateGridSettings,
   activeLayer,
-  onAddElement
+  onAddElement,
+  onImport,
+  onExport
 }: LeftSidebarProps) {
   const [searchTerm, setSearchTerm] = useState("");
   
@@ -296,38 +300,7 @@ export default function LeftSidebar({
                     variant="outline"
                     size="sm"
                     className="h-8 px-2 text-xs flex-1"
-                    onClick={() => {
-                      // Create a hidden file input
-                      const input = document.createElement('input');
-                      input.type = 'file';
-                      input.accept = '.json';
-                      
-                      input.onchange = (e) => {
-                        const target = e.target as HTMLInputElement;
-                        if (target.files && target.files[0]) {
-                          const file = target.files[0];
-                          const reader = new FileReader();
-                          
-                          reader.onload = (fileEvent) => {
-                            try {
-                              const jsonData = JSON.parse(fileEvent.target?.result as string);
-                              // Here you would handle the import data
-                              console.log('Imported data:', jsonData);
-                              // You would trigger an action here to load the design
-                              alert('Design imported successfully!');
-                            } catch (error) {
-                              console.error('Error parsing imported file:', error);
-                              alert('Failed to import design. Invalid file format.');
-                            }
-                          };
-                          
-                          reader.readAsText(file);
-                        }
-                      };
-                      
-                      // Trigger the file input
-                      input.click();
-                    }}
+                    onClick={onImport}
                   >
                     <UploadIcon className="h-3 w-3 mr-1" />
                     Import
@@ -336,31 +309,7 @@ export default function LeftSidebar({
                     variant="outline"
                     size="sm"
                     className="h-8 px-2 text-xs flex-1"
-                    onClick={() => {
-                      // Here you would create the export data
-                      // For now, we'll use placeholder data
-                      const exportData = {
-                        // Example data that would be replaced with actual project data
-                        name: "My Lighting Design",
-                        date: new Date().toISOString(),
-                        layers: [], // This would be filled with actual layer data
-                      };
-                      
-                      // Create a blob with the JSON data
-                      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-                      const url = URL.createObjectURL(blob);
-                      
-                      // Create a download link
-                      const a = document.createElement('a');
-                      a.href = url;
-                      a.download = `lighting-design-${new Date().toISOString().split('T')[0]}.json`;
-                      document.body.appendChild(a);
-                      a.click();
-                      
-                      // Clean up
-                      document.body.removeChild(a);
-                      URL.revokeObjectURL(url);
-                    }}
+                    onClick={onExport}
                   >
                     <ExportIcon className="h-3 w-3 mr-1" />
                     Export
