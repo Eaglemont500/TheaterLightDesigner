@@ -232,7 +232,7 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   );
 };
 
-// Custom component for rendering lighting grid elements
+// Custom component for rendering automatic lighting grid elements
 const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
@@ -347,6 +347,110 @@ const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Can
         {/* Grid label */}
         <Text
           text={`LIGHTING GRID (${spacing}" ${direction} spacing)`}
+          fontSize={14}
+          fill="#ffffff"
+          width={element.width || 800}
+          align="center"
+          y={(element.height || 400) - 20}
+          opacity={0.7}
+        />
+      </Group>
+      
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          boundBoxFunc={(oldBox, newBox) => {
+            // Limit resize to a certain minimum
+            if (newBox.width < 200 || newBox.height < 100) {
+              return oldBox;
+            }
+            return newBox;
+          }}
+        />
+      )}
+    </>
+  );
+};
+
+// Custom component for rendering custom-drawn lighting grid elements
+const CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+  const shapeRef = useRef<any>(null);
+  const trRef = useRef<any>(null);
+  
+  useEffect(() => {
+    if (isSelected && trRef.current) {
+      // Attach transformer
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [isSelected]);
+
+  // Get custom grid lines from properties
+  const customLines = element.properties?.lines || [];
+  
+  return (
+    <>
+      <Group
+        x={element.x}
+        y={element.y}
+        rotation={element.rotation}
+        ref={shapeRef}
+        onClick={onSelect}
+        onTap={onSelect}
+        draggable={draggable}
+        onDragEnd={(e) => {
+          onChange({
+            ...element,
+            x: e.target.x(),
+            y: e.target.y(),
+          });
+        }}
+        onTransformEnd={() => {
+          if (shapeRef.current) {
+            const node = shapeRef.current;
+            const scaleX = node.scaleX();
+            const scaleY = node.scaleY();
+            
+            // Reset scale and apply scaled width/height
+            node.scaleX(1);
+            node.scaleY(1);
+            
+            onChange({
+              ...element,
+              x: node.x(),
+              y: node.y(),
+              width: Math.max(100, node.width() * scaleX),
+              height: Math.max(100, node.height() * scaleY),
+              rotation: node.rotation(),
+            });
+          }
+        }}
+      >
+        {/* Border outline for the grid */}
+        <Rect
+          width={element.width || 800}
+          height={element.height || 400}
+          stroke="#888888"
+          strokeWidth={2}
+          fill="transparent"
+        />
+        
+        {/* Custom-drawn grid lines */}
+        {customLines.map((line: any) => (
+          <Line
+            key={line.id}
+            points={line.points}
+            stroke={line.color}
+            strokeWidth={line.width}
+            tension={0}
+            lineCap="round"
+            lineJoin="round"
+          />
+        ))}
+        
+        {/* Grid label */}
+        <Text
+          text="CUSTOM LIGHTING GRID"
           fontSize={14}
           fill="#ffffff"
           width={element.width || 800}
@@ -786,16 +890,29 @@ export default function Canvas({
                       />
                     );
                   } else if (element.type === "grid") {
-                    return (
-                      <GridElement
-                        key={element.id}
-                        element={element}
-                        isSelected={isSelected}
-                        onSelect={() => handleSelectElement(element.id)}
-                        onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
-                        draggable={isDraggable}
-                      />
-                    );
+                    if (element.properties?.customGrid) {
+                      return (
+                        <CustomGridElement
+                          key={element.id}
+                          element={element}
+                          isSelected={isSelected}
+                          onSelect={() => handleSelectElement(element.id)}
+                          onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
+                          draggable={isDraggable}
+                        />
+                      );
+                    } else {
+                      return (
+                        <GridElement
+                          key={element.id}
+                          element={element}
+                          isSelected={isSelected}
+                          onSelect={() => handleSelectElement(element.id)}
+                          onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
+                          draggable={isDraggable}
+                        />
+                      );
+                    }
                   } else if (element.type === "stage") {
                     return (
                       <StageOutlineElement

@@ -12,8 +12,10 @@ import {
   Download as ExportIcon,
   Upload as UploadIcon,
   HashIcon,
-  PaletteIcon
+  PaletteIcon,
+  Pencil as PencilIcon
 } from "lucide-react";
+import GridEditor from "./GridEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -476,8 +478,9 @@ export default function LeftSidebar({
                 </div>
               </div>
               
+              {/* Regular grid with equal spacing */}
               <Button 
-                className="w-full"
+                className="w-full mb-3"
                 onClick={() => {
                   if (!activeLayer) return;
                   
@@ -502,8 +505,32 @@ export default function LeftSidebar({
                 }}
               >
                 <PlusIcon className="h-4 w-4 mr-2" />
-                Create Lighting Grid
+                Create Regular Grid
               </Button>
+              
+              {/* Custom grid with drawing interface */}
+              <GridEditor 
+                onSave={(lines) => {
+                  if (!activeLayer) return;
+                  
+                  const newElement = {
+                    id: nanoid(),
+                    type: "grid" as const,
+                    x: 100,
+                    y: 100,
+                    width: 800,
+                    height: 400,
+                    rotation: 0,
+                    assetId: "custom-lighting-grid",
+                    properties: {
+                      customGrid: true,
+                      lines: lines
+                    },
+                  };
+                  
+                  onAddElement(newElement);
+                }}
+              />
             </div>
           </div>
         )}
