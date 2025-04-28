@@ -24,8 +24,8 @@ const LightElement = ({ element, isSelected, onSelect, onChange, draggable }: Ca
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
 
-  // Get light details
-  const lightDetails = getEtcLightByAssetId(element.assetId);
+  // Get light details with memoization for performance
+  const lightDetails = useMemo(() => getEtcLightByAssetId(element.assetId), [element.assetId]);
   
   useEffect(() => {
     if (isSelected && trRef.current) {
@@ -185,7 +185,7 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   const trRef = useRef<any>(null);
 
   // Get gel details
-  const gelDetails = getRoscoLuxGelByAssetId(element.assetId);
+  const gelDetails = useMemo(() => getRoscoLuxGelByAssetId(element.assetId), [element.assetId]);
   
   useEffect(() => {
     if (isSelected && trRef.current) {
@@ -861,8 +861,8 @@ export default function Canvas({
     }
   };
 
-  // Create grid lines for background
-  const renderGrid = () => {
+  // Create grid lines for background with memoization to avoid re-rendering
+  const renderGrid = useMemo(() => {
     if (!gridSettings.visible) return null;
     
     const gridLines = [];
@@ -881,6 +881,7 @@ export default function Canvas({
           width={1}
           height={canvasHeight}
           fill={gridColor}
+          listening={false} // Disable event handling for performance
         />
       );
     }
@@ -895,12 +896,13 @@ export default function Canvas({
           width={canvasWidth}
           height={1}
           fill={gridColor}
+          listening={false} // Disable event handling for performance
         />
       );
     }
     
     return gridLines;
-  };
+  }, [gridSettings.visible, gridSettings.spacing, gridSettings.color, canvasWidth, canvasHeight]);
 
   return (
     <div className="flex-1 relative overflow-hidden">
@@ -917,6 +919,12 @@ export default function Canvas({
           onTap={handleStageClick}
           draggable={activeTool === "hand"}
           onDragStart={() => setIsDraggingStage(true)}
+          onDragMove={(e) => {
+            // Update position during drag for smoother movement
+            if (activeTool === "hand") {
+              setStagePosition({ x: e.target.x(), y: e.target.y() });
+            }
+          }}
           onDragEnd={(e) => {
             setStagePosition({ x: e.target.x(), y: e.target.y() });
             setIsDraggingStage(false);
@@ -932,7 +940,7 @@ export default function Canvas({
               height={canvasHeight}
               fill="#121212"
             />
-            {renderGrid()}
+            {renderGrid}
           </Layer>
           
           {/* Content Layers */}
