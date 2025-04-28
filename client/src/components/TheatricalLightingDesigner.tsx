@@ -337,40 +337,45 @@ export default function TheatricalLightingDesigner() {
           activeLayer={activeLayer}
           onAddElement={(element) => {
             if (activeLayer && activeLayerIndex !== -1) {
-              // For custom grids, add them to the background layer
+              // For custom grids, create a new layer
               if (element.type === "grid" && element.properties?.customGrid) {
-                // Find the background layer
-                const backgroundLayerIndex = projectData.layers.findIndex(layer => layer.name === "Background");
+                // Create a new layer specifically for this custom grid
+                const gridElement = {
+                  ...element,
+                  x: 0, 
+                  y: 0,
+                  width: projectData.canvasWidth, // Make it span the whole canvas
+                  height: projectData.canvasHeight
+                };
                 
-                if (backgroundLayerIndex !== -1) {
-                  const updatedLayers = [...projectData.layers];
-                  const backgroundLayer = updatedLayers[backgroundLayerIndex];
-                  
-                  // Set position appropriately for background 
-                  const gridElement = {
-                    ...element,
-                    x: 0, // Center the grid
-                    y: 0,
-                    width: projectData.canvasWidth, // Make it span the whole canvas
-                    height: projectData.canvasHeight
-                  };
-                  
-                  // Replace any existing grid elements in background
-                  const nonGridElements = backgroundLayer.elements.filter(el => el.type !== "grid" || !el.properties?.customGrid);
-                  
-                  updatedLayers[backgroundLayerIndex] = {
-                    ...backgroundLayer,
-                    elements: [...nonGridElements, gridElement]
-                  };
-                  
-                  handleUpdateLayers(updatedLayers);
-                  
-                  // Show a success toast notification
-                  toast({
-                    title: "Custom Grid Added",
-                    description: "Custom grid has been added to the background layer",
-                  });
-                }
+                // Create a timestamp for a unique grid name
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const timestamp = `${hours}:${minutes}`;
+                
+                // Create a new layer with a descriptive name
+                const newGridLayer: Layer = {
+                  id: nanoid(),
+                  name: `Custom Grid (${timestamp})`,
+                  visible: true,
+                  locked: false,
+                  opacity: 100,
+                  elements: [gridElement]
+                };
+                
+                // Add this new layer to the project
+                const updatedLayers = [...projectData.layers, newGridLayer];
+                handleUpdateLayers(updatedLayers);
+                
+                // Automatically select the new grid layer
+                handleSelectLayer(newGridLayer.id);
+                
+                // Show a success toast notification
+                toast({
+                  title: "Custom Grid Added",
+                  description: "A new layer has been created with your custom grid",
+                });
               } else {
                 // Regular elements go to the active layer
                 const updatedLayers = [...projectData.layers];
