@@ -308,11 +308,9 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   );
 };
 
-// Importing from separate file to fix grid resizing issues
-import { GridElement, CustomGridElement } from "./GridElement";
 
 // Legacy Grid component definition - kept for reference but not used
-const _GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
   
@@ -406,8 +404,8 @@ const _GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Ca
               ...element,
               x: node.x(),
               y: node.y(),
-              width: Math.max(100, node.width() * scaleX),
-              height: Math.max(100, node.height() * scaleY),
+              width: node.width() * scaleX,
+              height: node.height() * scaleY,
               rotation: node.rotation(),
             });
           }
@@ -454,7 +452,7 @@ const _GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Ca
 };
 
 // Legacy Custom Grid component definition - kept for reference but not used
-const _CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+const CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
   
@@ -500,8 +498,8 @@ const _CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable
               ...element,
               x: node.x(),
               y: node.y(),
-              width: Math.max(100, node.width() * scaleX),
-              height: Math.max(100, node.height() * scaleY),
+              width: node.width() * scaleX,
+              height: node.height() * scaleY,
               rotation: node.rotation(),
             });
           }
@@ -604,8 +602,8 @@ const StageOutlineElement = ({ element, isSelected, onSelect, onChange, draggabl
               ...element,
               x: node.x(),
               y: node.y(),
-              width: Math.max(100, node.width() * scaleX),
-              height: Math.max(100, node.height() * scaleY),
+              width: node.width() * scaleX,
+              height: node.height() * scaleY,
               rotation: node.rotation(),
             });
           }
