@@ -337,12 +337,49 @@ export default function TheatricalLightingDesigner() {
           activeLayer={activeLayer}
           onAddElement={(element) => {
             if (activeLayer && activeLayerIndex !== -1) {
-              const updatedLayers = [...projectData.layers];
-              updatedLayers[activeLayerIndex] = {
-                ...activeLayer,
-                elements: [...activeLayer.elements, element]
-              };
-              handleUpdateLayers(updatedLayers);
+              // For custom grids, add them to the background layer
+              if (element.type === "grid" && element.properties?.customGrid) {
+                // Find the background layer
+                const backgroundLayerIndex = projectData.layers.findIndex(layer => layer.name === "Background");
+                
+                if (backgroundLayerIndex !== -1) {
+                  const updatedLayers = [...projectData.layers];
+                  const backgroundLayer = updatedLayers[backgroundLayerIndex];
+                  
+                  // Set position appropriately for background 
+                  const gridElement = {
+                    ...element,
+                    x: 0, // Center the grid
+                    y: 0,
+                    width: projectData.canvasWidth, // Make it span the whole canvas
+                    height: projectData.canvasHeight
+                  };
+                  
+                  // Replace any existing grid elements in background
+                  const nonGridElements = backgroundLayer.elements.filter(el => el.type !== "grid" || !el.properties?.customGrid);
+                  
+                  updatedLayers[backgroundLayerIndex] = {
+                    ...backgroundLayer,
+                    elements: [...nonGridElements, gridElement]
+                  };
+                  
+                  handleUpdateLayers(updatedLayers);
+                  
+                  // Show a success toast notification
+                  toast({
+                    title: "Custom Grid Added",
+                    description: "Custom grid has been added to the background layer",
+                  });
+                }
+              } else {
+                // Regular elements go to the active layer
+                const updatedLayers = [...projectData.layers];
+                updatedLayers[activeLayerIndex] = {
+                  ...activeLayer,
+                  elements: [...activeLayer.elements, element]
+                };
+                handleUpdateLayers(updatedLayers);
+              }
             }
           }}
           onImport={handleImportProject}

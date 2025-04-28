@@ -206,8 +206,22 @@ export default function GridEditor({ onSave }: GridEditorProps) {
       // For pencil, we add points to create a freehand path
       setCurrentLine([...currentLine, pointerPosition.x, pointerPosition.y]);
     } else if (tool === "line") {
-      // For line, we only keep start point and current point to create a straight line
-      setCurrentLine([currentLine[0], currentLine[1], pointerPosition.x, pointerPosition.y]);
+      // Get the start point
+      const startX = currentLine[0];
+      const startY = currentLine[1];
+      
+      // Calculate distance for horizontal vs vertical
+      const dx = Math.abs(pointerPosition.x - startX);
+      const dy = Math.abs(pointerPosition.y - startY);
+      
+      // Snap to horizontal or vertical based on which delta is larger
+      if (dx > dy) {
+        // Horizontal line
+        setCurrentLine([startX, startY, pointerPosition.x, startY]);
+      } else {
+        // Vertical line
+        setCurrentLine([startX, startY, startX, pointerPosition.y]);
+      }
     }
   };
 
@@ -388,7 +402,7 @@ export default function GridEditor({ onSave }: GridEditorProps) {
           </div>
           
           <div className="text-xs text-muted-foreground p-2 bg-muted/50 rounded-md">
-            <strong>Tip:</strong> Select a line to move or resize it. Use the Line or Freehand tool to draw new lines.
+            <strong>Tip:</strong> Select a line to move or resize it. The Line tool automatically snaps to horizontal or vertical. Use Freehand for curved lines.
           </div>
         </div>
 
