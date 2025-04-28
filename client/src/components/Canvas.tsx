@@ -835,10 +835,9 @@ export default function Canvas({
     // Only allow stage movement when in hand tool mode
     if (activeTool === "hand") {
       setStagePosition({ x: e.target.x(), y: e.target.y() });
-    } else {
-      // Reset position if not in hand tool mode to prevent background movement
-      e.target.position({ x: stagePosition.x, y: stagePosition.y });
     }
+    // We're no longer forcing reset of position when not in hand tool mode
+    // as this was causing issues with element dragging
   };
 
   // Handle wheel zoom with better stabilization
@@ -947,7 +946,10 @@ export default function Canvas({
           onDragStart={() => setIsDraggingStage(true)}
           onDragMove={handleStageDrag}
           onDragEnd={(e) => {
-            handleStageDrag(e);
+            // Only update stage position if in hand tool mode
+            if (activeTool === "hand") {
+              setStagePosition({ x: e.target.x(), y: e.target.y() });
+            }
             setIsDraggingStage(false);
           }}
           onWheel={handleWheel}
