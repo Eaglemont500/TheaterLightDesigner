@@ -257,7 +257,7 @@ const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Can
     const height = element.height || 400;
     const lines = [];
     
-    if (direction === "horizontal") {
+    if (direction === "horizontal" || direction === "both") {
       // Horizontal bars
       const numBars = Math.floor(height / spacing) + 1;
       for (let i = 0; i < numBars; i++) {
@@ -273,7 +273,9 @@ const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Can
           );
         }
       }
-    } else {
+    }
+    
+    if (direction === "vertical" || direction === "both") {
       // Vertical bars
       const numBars = Math.floor(width / spacing) + 1;
       for (let i = 0; i < numBars; i++) {
@@ -346,7 +348,7 @@ const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Can
         
         {/* Grid label */}
         <Text
-          text={`LIGHTING GRID (${spacing}" ${direction} spacing)`}
+          text={`LIGHTING GRID (${spacing}" ${direction === "both" ? "grid" : direction} spacing)`}
           fontSize={14}
           fill="#ffffff"
           width={element.width || 800}
@@ -864,7 +866,22 @@ export default function Canvas({
               <Layer key={layer.id} opacity={layer.opacity / 100}>
                 {layer.elements.map((element) => {
                   const isSelected = selectedElementId === element.id;
-                  const isDraggable = activeTool === "move" && !layer.locked;
+                  
+                  // Determine if this element should be draggable
+                  // Background elements and grid elements should not be draggable by default
+                  const isBackgroundLayer = layer.name === "Background";
+                  const isGridElement = element.type === "grid";
+                  const isCustomGridLayer = layer.name.startsWith("Custom Grid");
+                  
+                  // Elements should not be draggable if:
+                  // 1. The layer is locked, or
+                  // 2. We're not in move mode, or
+                  // 3. It's a grid element in the background layer, or
+                  // 4. It's in a custom grid layer
+                  const isDraggable = activeTool === "move" && 
+                                     !layer.locked && 
+                                     !(isBackgroundLayer && isGridElement) &&
+                                     !isCustomGridLayer;
                   
                   // Render different element types
                   if (element.type === "light") {

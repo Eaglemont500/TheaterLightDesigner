@@ -359,7 +359,7 @@ export default function TheatricalLightingDesigner() {
                   id: nanoid(),
                   name: `Custom Grid (${timestamp})`,
                   visible: true,
-                  locked: false,
+                  locked: true, // Lock the grid layer by default so it can't be moved
                   opacity: 100,
                   elements: [gridElement]
                 };

@@ -479,34 +479,100 @@ export default function LeftSidebar({
               </div>
               
               {/* Regular grid with equal spacing */}
-              <Button 
-                className="w-full mb-3"
-                onClick={() => {
-                  if (!activeLayer) return;
+              <div className="mb-3 space-y-2">
+                <div className="text-sm font-medium mb-1">Regular Grid:</div>
+                <div className="flex gap-2">
+                  <Button 
+                    className="flex-1"
+                    size="sm"
+                    onClick={() => {
+                      if (!activeLayer) return;
+                      
+                      const newElement = {
+                        id: nanoid(),
+                        type: "grid" as const,
+                        x: 100,
+                        y: 100,
+                        width: 800,
+                        height: 400,
+                        rotation: 0,
+                        assetId: "lighting-grid",
+                        properties: {
+                          direction: "horizontal",
+                          spacing: gridBarSpacing,
+                          barColor: "#888888",
+                          barWidth: 2
+                        },
+                      };
+                      
+                      onAddElement(newElement);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-2" />
+                    Horizontal
+                  </Button>
                   
-                  const newElement = {
-                    id: nanoid(),
-                    type: "grid" as const,
-                    x: 100,
-                    y: 100,
-                    width: 800,
-                    height: 400,
-                    rotation: 0,
-                    assetId: "lighting-grid",
-                    properties: {
-                      direction: gridBarDirection,
-                      spacing: gridBarSpacing,
-                      barColor: "#888888",
-                      barWidth: 2
-                    },
-                  };
-                  
-                  onAddElement(newElement);
-                }}
-              >
-                <PlusIcon className="h-4 w-4 mr-2" />
-                Create Regular Grid
-              </Button>
+                  <Button 
+                    className="flex-1"
+                    size="sm"
+                    onClick={() => {
+                      if (!activeLayer) return;
+                      
+                      const newElement = {
+                        id: nanoid(),
+                        type: "grid" as const,
+                        x: 100,
+                        y: 100,
+                        width: 800,
+                        height: 400,
+                        rotation: 0,
+                        assetId: "lighting-grid",
+                        properties: {
+                          direction: "vertical",
+                          spacing: gridBarSpacing,
+                          barColor: "#888888",
+                          barWidth: 2
+                        },
+                      };
+                      
+                      onAddElement(newElement);
+                    }}
+                  >
+                    <PlusIcon className="h-4 w-4 mr-2" />
+                    Vertical
+                  </Button>
+                </div>
+                
+                <Button 
+                  className="w-full"
+                  size="sm"
+                  onClick={() => {
+                    if (!activeLayer) return;
+                    
+                    const newElement = {
+                      id: nanoid(),
+                      type: "grid" as const,
+                      x: 100,
+                      y: 100,
+                      width: 800,
+                      height: 400,
+                      rotation: 0,
+                      assetId: "lighting-grid",
+                      properties: {
+                        direction: "both",
+                        spacing: gridBarSpacing,
+                        barColor: "#888888",
+                        barWidth: 2
+                      },
+                    };
+                    
+                    onAddElement(newElement);
+                  }}
+                >
+                  <PlusIcon className="h-4 w-4 mr-2" />
+                  Grid (Both)
+                </Button>
+              </div>
               
               {/* Custom grid with drawing interface */}
               <GridEditor 
