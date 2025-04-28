@@ -953,11 +953,11 @@ export default function Canvas({
                   // Elements should not be draggable if:
                   // 1. The layer is locked, or
                   // 2. We're not in move mode, or
-                  // 3. It's a grid element in the background layer, or
-                  // 4. It's in a custom grid layer
+                  // 3. It's any element in the background layer, or
+                  // 4. It's a grid element in a custom grid layer
                   const isDraggable = activeTool === "move" && 
                                      !layer.locked && 
-                                     !(isBackgroundLayer && isGridElement) &&
+                                     !isBackgroundLayer && 
                                      !(isCustomGridLayer && isGridElement);
                   
                   // Render different element types

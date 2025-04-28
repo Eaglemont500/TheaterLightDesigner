@@ -9,7 +9,7 @@ export interface RoscoLuxGel {
   description?: string;
 }
 
-// Complete catalog of Rosco Lux series gels
+// Complete comprehensive catalog of Rosco Lux series gels including standard colors, diffusion, color correction, and specialty filters
 export const roscoLuxGels: RoscoLuxGel[] = [
   // Reds
   {
@@ -404,7 +404,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     transmissionFactor: 0.25
   },
   
-  // Additional Rosco gels
+  // Additional Rosco gels - Extended Set
   {
     id: "rosco-01",
     name: "R01 Light Bastard Amber",
@@ -492,6 +492,454 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     category: "Pinks",
     number: "36",
     transmissionFactor: 0.44
+  },
+  {
+    id: "rosco-37",
+    name: "R37 Pale Rose Pink",
+    color: "#FFD1DC",
+    category: "Pinks",
+    number: "37",
+    transmissionFactor: 0.47
+  },
+  {
+    id: "rosco-38",
+    name: "R38 Light Rose",
+    color: "#FFB7C5",
+    category: "Pinks",
+    number: "38",
+    transmissionFactor: 0.36
+  },
+  {
+    id: "rosco-39",
+    name: "R39 Skelton Exotic Sangria",
+    color: "#DB7093",
+    category: "Pinks",
+    number: "39",
+    transmissionFactor: 0.23
+  },
+  {
+    id: "rosco-42",
+    name: "R42 Deep Salmon",
+    color: "#FF7F50",
+    category: "Pinks",
+    number: "42",
+    transmissionFactor: 0.25
+  },
+  {
+    id: "rosco-43",
+    name: "R43 Deep Pink",
+    color: "#FF1493",
+    category: "Pinks",
+    number: "43",
+    transmissionFactor: 0.18
+  },
+  {
+    id: "rosco-44",
+    name: "R44 Middle Rose",
+    color: "#FF66B2",
+    category: "Pinks",
+    number: "44",
+    transmissionFactor: 0.33
+  },
+  {
+    id: "rosco-45",
+    name: "R45 Rose",
+    color: "#FF5CAD",
+    category: "Pinks",
+    number: "45",
+    transmissionFactor: 0.27
+  },
+  {
+    id: "rosco-46",
+    name: "R46 Magenta",
+    color: "#FF00FF",
+    category: "Purples",
+    number: "46",
+    transmissionFactor: 0.14
+  },
+  {
+    id: "rosco-47",
+    name: "R47 Light Rose Purple",
+    color: "#D8B2D8",
+    category: "Purples",
+    number: "47",
+    transmissionFactor: 0.38
+  },
+  {
+    id: "rosco-50",
+    name: "R50 Mauve",
+    color: "#BA55D3",
+    category: "Purples",
+    number: "50",
+    transmissionFactor: 0.19
+  },
+  {
+    id: "rosco-51",
+    name: "R51 Surprise Pink",
+    color: "#FF78C4",
+    category: "Pinks",
+    number: "51",
+    transmissionFactor: 0.19
+  },
+  {
+    id: "rosco-53",
+    name: "R53 Pale Lavender",
+    color: "#E6E6FA",
+    category: "Purples",
+    number: "53",
+    transmissionFactor: 0.63
+  },
+  {
+    id: "rosco-55",
+    name: "R55 Lilac",
+    color: "#C8A2C8",
+    category: "Purples",
+    number: "55",
+    transmissionFactor: 0.41
+  },
+  {
+    id: "rosco-56",
+    name: "R56 Gypsy Lavender",
+    color: "#B57EDC",
+    category: "Purples",
+    number: "56",
+    transmissionFactor: 0.32
+  },
+  {
+    id: "rosco-57",
+    name: "R57 Lavender",
+    color: "#CCCCFF",
+    category: "Purples",
+    number: "57",
+    transmissionFactor: 0.47
+  },
+  {
+    id: "rosco-60",
+    name: "R60 No Color Blue",
+    color: "#F0F8FF",
+    category: "Blues",
+    number: "60",
+    transmissionFactor: 0.89
+  },
+  {
+    id: "rosco-61",
+    name: "R61 Mist Blue",
+    color: "#E6F3FA",
+    category: "Blues",
+    number: "61",
+    transmissionFactor: 0.78
+  },
+  {
+    id: "rosco-62",
+    name: "R62 Booster Blue",
+    color: "#B0E0E6",
+    category: "Blues",
+    number: "62",
+    transmissionFactor: 0.61
+  },
+  {
+    id: "rosco-63",
+    name: "R63 Pale Blue",
+    color: "#B0E2FF",
+    category: "Blues",
+    number: "63",
+    transmissionFactor: 0.53
+  },
+  {
+    id: "rosco-66",
+    name: "R66 Cool Blue",
+    color: "#00BFFF",
+    category: "Blues",
+    number: "66",
+    transmissionFactor: 0.31
+  },
+  {
+    id: "rosco-70",
+    name: "R70 Nile Blue",
+    color: "#99FFFF",
+    category: "Blues",
+    number: "70",
+    transmissionFactor: 0.43
+  },
+  {
+    id: "rosco-71",
+    name: "R71 Sea Blue",
+    color: "#6495ED",
+    category: "Blues",
+    number: "71",
+    transmissionFactor: 0.21
+  },
+  {
+    id: "rosco-72",
+    name: "R72 Azure Blue",
+    color: "#4169E1",
+    category: "Blues",
+    number: "72",
+    transmissionFactor: 0.18
+  },
+  {
+    id: "rosco-73",
+    name: "R73 Peacock Blue",
+    color: "#1E90FF",
+    category: "Blues",
+    number: "73",
+    transmissionFactor: 0.16
+  },
+  {
+    id: "rosco-74",
+    name: "R74 Night Blue",
+    color: "#0000CD",
+    category: "Blues",
+    number: "74",
+    transmissionFactor: 0.09
+  },
+  {
+    id: "rosco-75",
+    name: "R75 Twilight Blue",
+    color: "#00008B",
+    category: "Blues",
+    number: "75",
+    transmissionFactor: 0.07
+  },
+  {
+    id: "rosco-76",
+    name: "R76 Light Green Blue",
+    color: "#00CED1",
+    category: "Blues",
+    number: "76",
+    transmissionFactor: 0.27
+  },
+  {
+    id: "rosco-77",
+    name: "R77 Green Blue",
+    color: "#008B8B",
+    category: "Blues",
+    number: "77",
+    transmissionFactor: 0.15
+  },
+  {
+    id: "rosco-78",
+    name: "R78 Trudy Blue",
+    color: "#6699CC",
+    category: "Blues",
+    number: "78",
+    transmissionFactor: 0.31
+  },
+  {
+    id: "rosco-79",
+    name: "R79 Bright Blue",
+    color: "#0000CC",
+    category: "Blues",
+    number: "79",
+    transmissionFactor: 0.11
+  },
+  {
+    id: "rosco-81",
+    name: "R81 Urban Blue",
+    color: "#2F4F4F",
+    category: "Blues",
+    number: "81",
+    transmissionFactor: 0.13
+  },
+  {
+    id: "rosco-82",
+    name: "R82 Surprise Blue",
+    color: "#191970",
+    category: "Blues",
+    number: "82",
+    transmissionFactor: 0.06
+  },
+  {
+    id: "rosco-83",
+    name: "R83 Medium Blue",
+    color: "#4682B4",
+    category: "Blues",
+    number: "83",
+    transmissionFactor: 0.17
+  },
+  {
+    id: "rosco-84",
+    name: "R84 Zephyr Blue",
+    color: "#AFEEEE",
+    category: "Blues",
+    number: "84",
+    transmissionFactor: 0.59
+  },
+  {
+    id: "rosco-85",
+    name: "R85 Deep Blue",
+    color: "#000080",
+    category: "Blues",
+    number: "85",
+    transmissionFactor: 0.05
+  },
+  {
+    id: "rosco-87",
+    name: "R87 Pale Yellow Green",
+    color: "#ADFF2F",
+    category: "Greens",
+    number: "87",
+    transmissionFactor: 0.58
+  },
+  {
+    id: "rosco-88",
+    name: "R88 Light Green",
+    color: "#90EE90",
+    category: "Greens",
+    number: "88",
+    transmissionFactor: 0.45
+  },
+  {
+    id: "rosco-92",
+    name: "R92 Turquoise",
+    color: "#40E0D0",
+    category: "Greens",
+    number: "92",
+    transmissionFactor: 0.23
+  },
+  {
+    id: "rosco-93",
+    name: "R93 Blue Green",
+    color: "#20B2AA",
+    category: "Greens",
+    number: "93",
+    transmissionFactor: 0.17
+  },
+  {
+    id: "rosco-96",
+    name: "R96 Lime",
+    color: "#32CD32",
+    category: "Greens",
+    number: "96",
+    transmissionFactor: 0.25
+  },
+  {
+    id: "rosco-99",
+    name: "R99 Chocolate",
+    color: "#8B4513",
+    category: "Browns",
+    number: "99",
+    transmissionFactor: 0.05
+  },
+  {
+    id: "rosco-18",
+    name: "R18 Flame",
+    color: "#FF8C00",
+    category: "Ambers",
+    number: "18",
+    transmissionFactor: 0.41
+  },
+  {
+    id: "rosco-3216",
+    name: "R3216 Eighth plus green",
+    color: "#D8F0E0",
+    category: "Minus Green",
+    number: "3216",
+    transmissionFactor: 0.76
+  },
+  {
+    id: "rosco-3220",
+    name: "R3220 Double Blue",
+    color: "#6495ED",
+    category: "CTB",
+    number: "3220",
+    transmissionFactor: 0.20
+  },
+  {
+    id: "rosco-3304",
+    name: "R3304 Tough Plus Green",
+    color: "#CCFFCC",
+    category: "Plus Green",
+    number: "3304",
+    transmissionFactor: 0.35
+  },
+  {
+    id: "rosco-3308",
+    name: "R3308 Tough Minus Green",
+    color: "#FFD9EC",
+    category: "Minus Green",
+    number: "3308",
+    transmissionFactor: 0.32
+  },
+  {
+    id: "rosco-3310",
+    name: "R3310 Fluorescent Correction",
+    color: "#FFE4EC",
+    category: "Minus Green",
+    number: "3310",
+    transmissionFactor: 0.47
+  },
+  {
+    id: "rosco-3313",
+    name: "R3313 Light Tough Minus Green",
+    color: "#FFE7F0",
+    category: "Minus Green",
+    number: "3313",
+    transmissionFactor: 0.60
+  },
+  {
+    id: "rosco-3314",
+    name: "R3314 Tough White Diffusion",
+    color: "#FEFEFE",
+    category: "Diffusion",
+    number: "3314",
+    transmissionFactor: 0.69
+  },
+  {
+    id: "rosco-3442",
+    name: "R3442 Half Straw CTO",
+    color: "#FFF3E0",
+    category: "CTO",
+    number: "3442",
+    transmissionFactor: 0.79
+  },
+  {
+    id: "rosco-3443",
+    name: "R3443 Quarter Straw CTO",
+    color: "#FFF9E6",
+    category: "CTO",
+    number: "3443",
+    transmissionFactor: 0.89
+  },
+  {
+    id: "rosco-3444",
+    name: "R3444 Eighth Straw CTO",
+    color: "#FFFDF0",
+    category: "CTO",
+    number: "3444",
+    transmissionFactor: 0.92
+  },
+  {
+    id: "rosco-104",
+    name: "R104 Tough Frost",
+    color: "#FFFFFF",
+    category: "Diffusion",
+    number: "104",
+    transmissionFactor: 0.83
+  },
+  {
+    id: "rosco-114",
+    name: "R114 Hamburg Frost",
+    color: "#FCFCFC",
+    category: "Diffusion",
+    number: "114",
+    transmissionFactor: 0.87
+  },
+  {
+    id: "rosco-119",
+    name: "R119 Light Hamburg Frost",
+    color: "#FDFDFD",
+    category: "Diffusion",
+    number: "119",
+    transmissionFactor: 0.90
+  },
+  {
+    id: "rosco-132",
+    name: "R132 Quarter Hamburg Frost",
+    color: "#FEFEFE",
+    category: "Diffusion",
+    number: "132",
+    transmissionFactor: 0.93
   }
 ];
 
