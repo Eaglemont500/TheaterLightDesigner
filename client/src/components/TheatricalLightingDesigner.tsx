@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { 
   ProjectDataSchema, 
   type ProjectData, 
@@ -286,7 +287,7 @@ export default function TheatricalLightingDesigner() {
           <LightbulbIcon className="text-orange-500 h-6 w-6 mr-2" />
           <h1 className="text-xl font-semibold">Theater Lighting Designer</h1>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Button 
             variant="secondary" 
             size="sm" 
@@ -321,6 +322,11 @@ export default function TheatricalLightingDesigner() {
           >
             <DownloadIcon className="mr-1 h-4 w-4" /> Export
           </Button>
+          
+          {/* Theme toggle button */}
+          <div className="border-l border-border pl-2 ml-2">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
