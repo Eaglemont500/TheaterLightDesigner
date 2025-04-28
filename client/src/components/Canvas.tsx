@@ -957,7 +957,7 @@ export default function Canvas({
                   const isDraggable = activeTool === "move" && 
                                      !layer.locked && 
                                      !(isBackgroundLayer && isGridElement) &&
-                                     !isCustomGridLayer;
+                                     !(isCustomGridLayer && isGridElement);
                   
                   // Render different element types
                   if (element.type === "light") {
