@@ -308,8 +308,11 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   );
 };
 
-// Custom component for rendering automatic lighting grid elements
-const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+// Importing from separate file to fix grid resizing issues
+import { GridElement, CustomGridElement } from "./GridElement";
+
+// Legacy Grid component definition - kept for reference but not used
+const _GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
   
@@ -450,8 +453,8 @@ const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: Can
   );
 };
 
-// Custom component for rendering custom-drawn lighting grid elements
-const CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+// Legacy Custom Grid component definition - kept for reference but not used
+const _CustomGridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
   

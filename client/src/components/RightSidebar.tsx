@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { type Layer } from "@shared/schema";
+import { bringElementToFront, sendElementToBack } from "@/lib/layerUtils";
 
 interface RightSidebarProps {
   layers: Layer[];
@@ -249,6 +250,21 @@ export default function RightSidebar({
                   variant="secondary"
                   size="sm"
                   className="flex items-center justify-center"
+                  onClick={() => {
+                    if (!selectedElementId) return;
+                    
+                    // Find the layer containing the selected element
+                    const layerIndex = layers.findIndex(layer => 
+                      layer.elements.some(element => element.id === selectedElementId)
+                    );
+                    
+                    if (layerIndex === -1) return;
+                    const layerId = layers[layerIndex].id;
+                    
+                    // Use the utility function to bring the element to front
+                    const updatedLayers = bringElementToFront(layers, layerId, selectedElementId);
+                    onUpdateLayers(updatedLayers);
+                  }}
                 >
                   <MoveUpIcon className="h-3 w-3 mr-1" /> Bring Front
                 </Button>
@@ -256,6 +272,21 @@ export default function RightSidebar({
                   variant="secondary"
                   size="sm"
                   className="flex items-center justify-center"
+                  onClick={() => {
+                    if (!selectedElementId) return;
+                    
+                    // Find the layer containing the selected element
+                    const layerIndex = layers.findIndex(layer => 
+                      layer.elements.some(element => element.id === selectedElementId)
+                    );
+                    
+                    if (layerIndex === -1) return;
+                    const layerId = layers[layerIndex].id;
+                    
+                    // Use the utility function to send the element to back
+                    const updatedLayers = sendElementToBack(layers, layerId, selectedElementId);
+                    onUpdateLayers(updatedLayers);
+                  }}
                 >
                   <MoveDownIcon className="h-3 w-3 mr-1" /> Send Back
                 </Button>
