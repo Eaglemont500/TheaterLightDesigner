@@ -19,7 +19,7 @@ interface CanvasElementProps {
   draggable: boolean;
 }
 
-// Custom component for rendering light elements
+// Custom component for rendering light elements with proper event handling
 const LightElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
@@ -932,13 +932,14 @@ export default function Canvas({
           onWheel={handleWheel}
         >
           {/* Grid Layer */}
-          <Layer>
+          <Layer listening={false}>
             <Rect
               x={0}
               y={0}
               width={canvasWidth}
               height={canvasHeight}
               fill="#121212"
+              listening={false}
             />
             {renderGrid}
           </Layer>
@@ -948,7 +949,7 @@ export default function Canvas({
             if (!layer.visible) return null;
             
             return (
-              <Layer key={layer.id} opacity={layer.opacity / 100}>
+              <Layer key={layer.id} opacity={layer.opacity / 100} listening={true}>
                 {layer.elements.map((element) => {
                   const isSelected = selectedElementId === element.id;
                   
@@ -979,7 +980,7 @@ export default function Canvas({
                         isSelected={isSelected}
                         onSelect={() => handleSelectElement(element.id)}
                         onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
-                        draggable={isDraggable}
+                        draggable={true}
                       />
                     );
                   } else if (element.type === "gel") {
