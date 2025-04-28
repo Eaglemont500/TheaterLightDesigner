@@ -991,7 +991,7 @@ export default function Canvas({
                         isSelected={isSelected}
                         onSelect={() => handleSelectElement(element.id)}
                         onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
-                        draggable={isDraggable}
+                        draggable={true}
                       />
                     );
                   } else if (element.type === "grid") {
