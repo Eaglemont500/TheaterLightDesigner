@@ -6,6 +6,13 @@ import {
   HandIcon, 
   SearchIcon, 
   PlusIcon,
+  ArrowUpDownIcon,
+  ArrowDownUpIcon,
+  ImportIcon,
+  Download as ExportIcon,
+  Upload as UploadIcon,
+  HashIcon,
+  PaletteIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,10 +20,11 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { nanoid } from "nanoid";
 import { type GridSettings, type Layer } from "@shared/schema";
 import { etcLights } from "@/lib/etcLights";
-import { roscoLuxGels } from "@/lib/roscoLuxGels";
+import { roscoLuxGels, sortGelsByColor, sortGelsByNumber } from "@/lib/roscoLuxGels";
 
 interface LeftSidebarProps {
   activeTool: "move" | "rotate" | "zoom" | "hand";
@@ -60,6 +68,9 @@ export default function LeftSidebar({
     onAddElement(newElement);
   };
   
+  // Gel sorting state
+  const [gelSortType, setGelSortType] = useState<"color" | "number">("color");
+  
   // Filter assets based on search term
   const filteredLights = etcLights.filter(light => 
     light.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -68,8 +79,14 @@ export default function LeftSidebar({
   
   const filteredGels = roscoLuxGels.filter(gel => 
     gel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    gel.id.toLowerCase().includes(searchTerm.toLowerCase())
+    gel.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    gel.number.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  // Sort gels based on sort type
+  const sortedGels = gelSortType === "color" 
+    ? filteredGels 
+    : sortGelsByNumber(filteredGels);
   
   // Group lights by manufacturer
   const lightManufacturers = filteredLights.reduce((acc, light) => {
@@ -81,14 +98,16 @@ export default function LeftSidebar({
     return acc;
   }, {} as Record<string, typeof etcLights>);
   
-  // Group gels by category
-  const gelCategories = filteredGels.reduce((acc, gel) => {
-    if (!acc[gel.category]) {
-      acc[gel.category] = [];
-    }
-    acc[gel.category].push(gel);
-    return acc;
-  }, {} as Record<string, typeof roscoLuxGels>);
+  // Group gels by category or just use the sorted list
+  const gelCategories = gelSortType === "color" 
+    ? sortedGels.reduce((acc, gel) => {
+        if (!acc[gel.category]) {
+          acc[gel.category] = [];
+        }
+        acc[gel.category].push(gel);
+        return acc;
+      }, {} as Record<string, typeof roscoLuxGels>)
+    : { "By Number": sortedGels };
 
   return (
     <div id="left-sidebar" className="w-64 bg-card border-r border-border flex flex-col">
@@ -234,7 +253,7 @@ export default function LeftSidebar({
         {selectedAssetTab === "gels" && (
           <div className="h-full flex flex-col">
             <div className="p-3 border-b border-border">
-              <div className="relative">
+              <div className="relative mb-2">
                 <Input
                   type="text"
                   placeholder="Search gels..."
@@ -243,6 +262,110 @@ export default function LeftSidebar({
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <SearchIcon className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              </div>
+              
+              {/* Sorting UI */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium">Sort by:</span>
+                  <div className="flex gap-1">
+                    <Button
+                      variant={gelSortType === "color" ? "default" : "outline"}
+                      size="sm"
+                      className="h-8 px-2 text-xs"
+                      onClick={() => setGelSortType("color")}
+                    >
+                      <PaletteIcon className="h-3 w-3 mr-1" />
+                      Color
+                    </Button>
+                    <Button
+                      variant={gelSortType === "number" ? "default" : "outline"}
+                      size="sm"
+                      className="h-8 px-2 text-xs"
+                      onClick={() => setGelSortType("number")}
+                    >
+                      <HashIcon className="h-3 w-3 mr-1" />
+                      Number
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Import/Export Buttons */}
+                <div className="flex gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 px-2 text-xs flex-1"
+                    onClick={() => {
+                      // Create a hidden file input
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = '.json';
+                      
+                      input.onchange = (e) => {
+                        const target = e.target as HTMLInputElement;
+                        if (target.files && target.files[0]) {
+                          const file = target.files[0];
+                          const reader = new FileReader();
+                          
+                          reader.onload = (fileEvent) => {
+                            try {
+                              const jsonData = JSON.parse(fileEvent.target?.result as string);
+                              // Here you would handle the import data
+                              console.log('Imported data:', jsonData);
+                              // You would trigger an action here to load the design
+                              alert('Design imported successfully!');
+                            } catch (error) {
+                              console.error('Error parsing imported file:', error);
+                              alert('Failed to import design. Invalid file format.');
+                            }
+                          };
+                          
+                          reader.readAsText(file);
+                        }
+                      };
+                      
+                      // Trigger the file input
+                      input.click();
+                    }}
+                  >
+                    <UploadIcon className="h-3 w-3 mr-1" />
+                    Import
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 px-2 text-xs flex-1"
+                    onClick={() => {
+                      // Here you would create the export data
+                      // For now, we'll use placeholder data
+                      const exportData = {
+                        // Example data that would be replaced with actual project data
+                        name: "My Lighting Design",
+                        date: new Date().toISOString(),
+                        layers: [], // This would be filled with actual layer data
+                      };
+                      
+                      // Create a blob with the JSON data
+                      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                      const url = URL.createObjectURL(blob);
+                      
+                      // Create a download link
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `lighting-design-${new Date().toISOString().split('T')[0]}.json`;
+                      document.body.appendChild(a);
+                      a.click();
+                      
+                      // Clean up
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    <ExportIcon className="h-3 w-3 mr-1" />
+                    Export
+                  </Button>
+                </div>
               </div>
             </div>
             

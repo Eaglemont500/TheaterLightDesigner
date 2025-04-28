@@ -4,6 +4,7 @@ export interface RoscoLuxGel {
   name: string;
   color: string;
   category: string;
+  number: string; // Gel number for sorting
   transmissionFactor?: number;
   description?: string;
 }
@@ -16,6 +17,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R26 Light Red",
     color: "#FF0000",
     category: "Reds",
+    number: "26",
     transmissionFactor: 0.15,
     description: "Primary red with slight blue correction"
   },
@@ -24,6 +26,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R27 Medium Red",
     color: "#FF3300",
     category: "Reds",
+    number: "27",
     transmissionFactor: 0.12
   },
   {
@@ -31,6 +34,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R24 Scarlet",
     color: "#FF2800",
     category: "Reds",
+    number: "24",
     transmissionFactor: 0.20
   },
   {
@@ -38,6 +42,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R25 Orange Red",
     color: "#FF3F00",
     category: "Reds",
+    number: "25",
     transmissionFactor: 0.22
   },
   {
@@ -45,6 +50,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R19 Fire",
     color: "#FF4400",
     category: "Reds",
+    number: "19",
     transmissionFactor: 0.32
   },
   {
@@ -52,6 +58,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R33 No Color Pink",
     color: "#FF6666",
     category: "Reds",
+    number: "33",
     transmissionFactor: 0.62
   },
 
@@ -61,6 +68,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R20 Medium Amber",
     color: "#FF9900",
     category: "Ambers",
+    number: "20",
     transmissionFactor: 0.46
   },
   {
@@ -68,6 +76,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R21 Golden Amber",
     color: "#FFCC00",
     category: "Ambers",
+    number: "21",
     transmissionFactor: 0.57
   },
   {
@@ -75,6 +84,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R22 Deep Amber",
     color: "#FFFF00",
     category: "Ambers",
+    number: "22",
     transmissionFactor: 0.39
   },
   {
@@ -82,6 +92,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R23 Orange",
     color: "#FF8C00",
     category: "Ambers",
+    number: "23",
     transmissionFactor: 0.29
   },
   {
@@ -89,6 +100,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R16 Light Amber",
     color: "#FFEEBB",
     category: "Ambers",
+    number: "16",
     transmissionFactor: 0.73
   },
   {
@@ -96,6 +108,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R17 Light Flame",
     color: "#FFD700",
     category: "Ambers",
+    number: "17",
     transmissionFactor: 0.69
   },
 
@@ -105,6 +118,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R10 Medium Yellow",
     color: "#FFFF33",
     category: "Yellows",
+    number: "10",
     transmissionFactor: 0.80
   },
   {
@@ -112,6 +126,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R11 Light Straw",
     color: "#FFFACD",
     category: "Yellows",
+    number: "11",
     transmissionFactor: 0.85
   },
   {
@@ -119,6 +134,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R12 Straw",
     color: "#FFF8DC",
     category: "Yellows",
+    number: "12",
     transmissionFactor: 0.82
   },
   {
@@ -126,6 +142,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R08 Pale Gold",
     color: "#FFEC80",
     category: "Yellows",
+    number: "08",
     transmissionFactor: 0.78
   },
   {
@@ -133,6 +150,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R09 Pale Amber Gold",
     color: "#FFE066",
     category: "Yellows",
+    number: "09",
     transmissionFactor: 0.76
   },
 
@@ -142,6 +160,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R91 Primary Green",
     color: "#00FF00",
     category: "Greens",
+    number: "91",
     transmissionFactor: 0.12
   },
   {
@@ -149,6 +168,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R94 Kelly Green",
     color: "#33FF33",
     category: "Greens",
+    number: "94",
     transmissionFactor: 0.19
   },
   {
@@ -156,6 +176,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R95 Medium Green",
     color: "#66FF66",
     category: "Greens",
+    number: "95",
     transmissionFactor: 0.21
   },
   {
@@ -163,6 +184,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R89 Moss Green",
     color: "#98FB98",
     category: "Greens",
+    number: "89",
     transmissionFactor: 0.32
   },
   {
@@ -170,6 +192,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R90 Dark Yellow Green",
     color: "#9ACD32",
     category: "Greens",
+    number: "90",
     transmissionFactor: 0.30
   },
   {
@@ -177,6 +200,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R86 Pea Green",
     color: "#8FBC8F",
     category: "Greens",
+    number: "86",
     transmissionFactor: 0.41
   },
 
@@ -186,6 +210,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R68 Sky Blue",
     color: "#0000FF",
     category: "Blues",
+    number: "68",
     transmissionFactor: 0.10
   },
   {
@@ -193,6 +218,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R69 Brilliant Blue",
     color: "#3333FF",
     category: "Blues",
+    number: "69",
     transmissionFactor: 0.15
   },
   {
@@ -200,6 +226,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R80 Primary Blue",
     color: "#6666FF",
     category: "Blues",
+    number: "80",
     transmissionFactor: 0.14
   },
   {
@@ -207,6 +234,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R67 Light Sky Blue",
     color: "#87CEEB",
     category: "Blues",
+    number: "67",
     transmissionFactor: 0.48
   },
   {
@@ -214,6 +242,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R64 Light Steel Blue",
     color: "#B0C4DE",
     category: "Blues",
+    number: "64",
     transmissionFactor: 0.56
   },
   {
@@ -221,6 +250,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R65 Daylight Blue",
     color: "#ADD8E6",
     category: "Blues",
+    number: "65",
     transmissionFactor: 0.59
   },
 
@@ -230,6 +260,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R58 Deep Lavender",
     color: "#8A2BE2",
     category: "Purples",
+    number: "58",
     transmissionFactor: 0.28
   },
   {
@@ -237,6 +268,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R59 Indigo",
     color: "#4B0082",
     category: "Purples",
+    number: "59",
     transmissionFactor: 0.09
   },
   {
@@ -244,6 +276,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R49 Medium Purple",
     color: "#9370DB",
     category: "Purples",
+    number: "49",
     transmissionFactor: 0.23
   },
   {
@@ -251,6 +284,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R48 Rose Purple",
     color: "#CC99CC",
     category: "Purples",
+    number: "48",
     transmissionFactor: 0.31
   },
   {
@@ -258,6 +292,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R52 Light Lavender",
     color: "#D8BFD8",
     category: "Purples",
+    number: "52",
     transmissionFactor: 0.57
   },
   {
@@ -265,6 +300,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R54 Special Lavender",
     color: "#E6E6FA",
     category: "Purples",
+    number: "54",
     transmissionFactor: 0.71
   },
 
@@ -274,6 +310,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3202 Full CTB",
     color: "#99CCFF",
     category: "CTB",
+    number: "3202",
     transmissionFactor: 0.36
   },
   {
@@ -281,6 +318,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3204 Half CTB",
     color: "#BFE0FF",
     category: "CTB",
+    number: "3204",
     transmissionFactor: 0.61
   },
   {
@@ -288,6 +326,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3206 Quarter CTB",
     color: "#D9ECFF",
     category: "CTB",
+    number: "3206",
     transmissionFactor: 0.72
   },
   {
@@ -295,6 +334,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3208 Eighth CTB",
     color: "#E9F5FF",
     category: "CTB",
+    number: "3208",
     transmissionFactor: 0.83
   },
   {
@@ -302,6 +342,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3407 Roscosun CTO",
     color: "#FFCC99",
     category: "CTO",
+    number: "3407",
     transmissionFactor: 0.59
   },
   {
@@ -309,6 +350,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R3409 Roscosun 1/2 CTO",
     color: "#FFE0BF",
     category: "CTO",
+    number: "3409",
     transmissionFactor: 0.73
   },
 
@@ -318,6 +360,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R00 Clear",
     color: "#FFFFFF",
     category: "Neutrals",
+    number: "00",
     transmissionFactor: 0.97
   },
   {
@@ -325,6 +368,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R02 Bastard Amber",
     color: "#FFF5EE",
     category: "Neutrals",
+    number: "02",
     transmissionFactor: 0.83
   },
   {
@@ -332,6 +376,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R15 Deep Straw",
     color: "#FFEBCD",
     category: "Neutrals",
+    number: "15",
     transmissionFactor: 0.71
   },
   {
@@ -339,6 +384,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R03 Dark Bastard Amber",
     color: "#FFE4C4",
     category: "Neutrals",
+    number: "03",
     transmissionFactor: 0.68
   },
   {
@@ -346,6 +392,7 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R98 ND.3",
     color: "#CCCCCC",
     category: "Neutrals",
+    number: "98",
     transmissionFactor: 0.50
   },
   {
@@ -353,9 +400,122 @@ export const roscoLuxGels: RoscoLuxGel[] = [
     name: "R97 ND.6",
     color: "#999999",
     category: "Neutrals",
+    number: "97",
     transmissionFactor: 0.25
+  },
+  
+  // Additional Rosco gels
+  {
+    id: "rosco-01",
+    name: "R01 Light Bastard Amber",
+    color: "#FFFAF0",
+    category: "Neutrals",
+    number: "01",
+    transmissionFactor: 0.87
+  },
+  {
+    id: "rosco-04",
+    name: "R04 Medium Bastard Amber",
+    color: "#FFDAB9",
+    category: "Neutrals",
+    number: "04",
+    transmissionFactor: 0.75
+  },
+  {
+    id: "rosco-05",
+    name: "R05 Rose Tint",
+    color: "#FFE4E1",
+    category: "Pinks",
+    number: "05",
+    transmissionFactor: 0.80
+  },
+  {
+    id: "rosco-06",
+    name: "R06 No Color Straw",
+    color: "#FFFFF0",
+    category: "Yellows",
+    number: "06",
+    transmissionFactor: 0.85
+  },
+  {
+    id: "rosco-07",
+    name: "R07 Pale Yellow",
+    color: "#FFFFD3",
+    category: "Yellows",
+    number: "07",
+    transmissionFactor: 0.82
+  },
+  {
+    id: "rosco-30",
+    name: "R30 Light Salmon Pink",
+    color: "#FFA07A",
+    category: "Pinks",
+    number: "30",
+    transmissionFactor: 0.40
+  },
+  {
+    id: "rosco-31",
+    name: "R31 Salmon Pink",
+    color: "#FA8072",
+    category: "Pinks",
+    number: "31",
+    transmissionFactor: 0.35
+  },
+  {
+    id: "rosco-32",
+    name: "R32 Medium Salmon Pink",
+    color: "#FF6347",
+    category: "Pinks",
+    number: "32",
+    transmissionFactor: 0.28
+  },
+  {
+    id: "rosco-34",
+    name: "R34 Flesh Pink",
+    color: "#FFDAB9",
+    category: "Pinks",
+    number: "34",
+    transmissionFactor: 0.58
+  },
+  {
+    id: "rosco-35",
+    name: "R35 Light Pink",
+    color: "#FFB6C1",
+    category: "Pinks",
+    number: "35",
+    transmissionFactor: 0.53
+  },
+  {
+    id: "rosco-36",
+    name: "R36 Medium Pink",
+    color: "#FF69B4",
+    category: "Pinks",
+    number: "36",
+    transmissionFactor: 0.44
   }
 ];
+
+// Add some utility functions for sorting and filtering gels
+
+// Sort by color (category)
+export function sortGelsByColor(gels: RoscoLuxGel[]): RoscoLuxGel[] {
+  return [...gels].sort((a, b) => a.category.localeCompare(b.category));
+}
+
+// Sort by number
+export function sortGelsByNumber(gels: RoscoLuxGel[]): RoscoLuxGel[] {
+  return [...gels].sort((a, b) => {
+    const numA = parseInt(a.number);
+    const numB = parseInt(b.number);
+    
+    // Handle non-numeric values
+    if (isNaN(numA) && isNaN(numB)) return a.number.localeCompare(b.number);
+    if (isNaN(numA)) return 1;
+    if (isNaN(numB)) return -1;
+    
+    return numA - numB;
+  });
+}
 
 // Helper function to get gel details by ID
 export function getRoscoLuxGelByAssetId(assetId: string): RoscoLuxGel | undefined {
