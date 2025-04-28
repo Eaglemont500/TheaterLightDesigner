@@ -830,7 +830,18 @@ export default function Canvas({
     setStagePosition({ x: 0, y: 0 });
   };
 
-  // Handle wheel zoom
+  // Function to handle stage dragging
+  const handleStageDrag = (e: any) => {
+    // Only allow stage movement when in hand tool mode
+    if (activeTool === "hand") {
+      setStagePosition({ x: e.target.x(), y: e.target.y() });
+    } else {
+      // Reset position if not in hand tool mode to prevent background movement
+      e.target.position({ x: stagePosition.x, y: stagePosition.y });
+    }
+  };
+
+  // Handle wheel zoom with better stabilization
   const handleWheel = (e: any) => {
     if (activeTool === "zoom") {
       e.evt.preventDefault();
@@ -839,7 +850,10 @@ export default function Canvas({
       const stage = stageRef.current;
       const oldScale = stage.scaleX();
       
+      // Get current pointer position relative to stage
       const pointerPosition = stage.getPointerPosition();
+      
+      // Calculate pointer position in the world space
       const mousePointTo = {
         x: (pointerPosition.x - stage.x()) / oldScale,
         y: (pointerPosition.y - stage.y()) / oldScale,
@@ -847,17 +861,29 @@ export default function Canvas({
       
       // Determine zoom direction based on delta
       const direction = e.evt.deltaY > 0 ? -1 : 1;
-      const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
       
-      // Update zoom in the state
-      onUpdateZoom(newScale);
-      
-      const newPos = {
-        x: pointerPosition.x - mousePointTo.x * newScale,
-        y: pointerPosition.y - mousePointTo.y * newScale,
-      };
-      
-      setStagePosition(newPos);
+      // Apply zoom constraints (0.3 to 3)
+      if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.3)) {
+        // Calculate new scale
+        const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+        
+        // Update zoom in parent state
+        onUpdateZoom(newScale);
+        
+        // Calculate new position to keep mouse point fixed
+        const newPos = {
+          x: pointerPosition.x - mousePointTo.x * newScale,
+          y: pointerPosition.y - mousePointTo.y * newScale,
+        };
+        
+        // Update stage position state
+        setStagePosition(newPos);
+        
+        // Apply to stage immediately for smoother zooming
+        stage.scale({ x: newScale, y: newScale });
+        stage.position(newPos);
+        stage.batchDraw();
+      }
     }
   };
 
@@ -919,14 +945,9 @@ export default function Canvas({
           onTap={handleStageClick}
           draggable={activeTool === "hand"}
           onDragStart={() => setIsDraggingStage(true)}
-          onDragMove={(e) => {
-            // Update position during drag for smoother movement
-            if (activeTool === "hand") {
-              setStagePosition({ x: e.target.x(), y: e.target.y() });
-            }
-          }}
+          onDragMove={handleStageDrag}
           onDragEnd={(e) => {
-            setStagePosition({ x: e.target.x(), y: e.target.y() });
+            handleStageDrag(e);
             setIsDraggingStage(false);
           }}
           onWheel={handleWheel}
