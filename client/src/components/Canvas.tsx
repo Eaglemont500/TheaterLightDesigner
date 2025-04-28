@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Group, Rect, Text, Transformer } from "react-konva";
+import { Stage, Layer, Group, Rect, Text, Transformer, Line, Circle } from "react-konva";
 import { nanoid } from "nanoid";
 import { type ProjectData, type Layer as LayerType } from "@shared/schema";
 import { getEtcLightByAssetId } from "@/lib/etcLights";
@@ -232,6 +232,215 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   );
 };
 
+// Custom component for rendering stage outline elements
+const StageOutlineElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+  const shapeRef = useRef<any>(null);
+  const trRef = useRef<any>(null);
+  
+  useEffect(() => {
+    if (isSelected && trRef.current) {
+      // Attach transformer
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [isSelected]);
+
+  // Get stage type from properties or default to proscenium
+  const stageType = element.properties?.stageType || "proscenium";
+  
+  return (
+    <>
+      <Group
+        x={element.x}
+        y={element.y}
+        rotation={element.rotation}
+        ref={shapeRef}
+        onClick={onSelect}
+        onTap={onSelect}
+        draggable={draggable}
+        onDragEnd={(e) => {
+          onChange({
+            ...element,
+            x: e.target.x(),
+            y: e.target.y(),
+          });
+        }}
+        onTransformEnd={() => {
+          if (shapeRef.current) {
+            const node = shapeRef.current;
+            const scaleX = node.scaleX();
+            const scaleY = node.scaleY();
+            
+            // Reset scale and apply scaled width/height
+            node.scaleX(1);
+            node.scaleY(1);
+            
+            onChange({
+              ...element,
+              x: node.x(),
+              y: node.y(),
+              width: Math.max(100, node.width() * scaleX),
+              height: Math.max(100, node.height() * scaleY),
+              rotation: node.rotation(),
+            });
+          }
+        }}
+      >
+        {stageType === "proscenium" && (
+          <>
+            {/* Main stage outline */}
+            <Rect
+              width={element.width || 800}
+              height={element.height || 400}
+              stroke="#ffffff"
+              strokeWidth={2}
+              fill="rgba(30, 30, 30, 0.5)"
+              cornerRadius={0}
+            />
+            
+            {/* Front of stage line (apron) */}
+            <Line
+              points={[0, 0, element.width || 800, 0]}
+              stroke="#ffffff"
+              strokeWidth={3}
+              dash={[10, 5]}
+            />
+            
+            {/* Center line */}
+            <Line
+              points={[(element.width || 800) / 2, 0, (element.width || 800) / 2, element.height || 400]}
+              stroke="#ffffff"
+              strokeWidth={1}
+              dash={[5, 5]}
+              opacity={0.5}
+            />
+            
+            {/* Stage label */}
+            <Text
+              text="STAGE"
+              fontSize={20}
+              fill="#ffffff"
+              width={element.width || 800}
+              align="center"
+              y={(element.height || 400) / 2 - 10}
+              opacity={0.3}
+            />
+          </>
+        )}
+        
+        {stageType === "thrust" && (
+          <>
+            {/* Thrust stage has audience on three sides */}
+            <Rect
+              width={element.width || 800}
+              height={element.height || 400}
+              stroke="#ffffff"
+              strokeWidth={2}
+              fill="rgba(30, 30, 30, 0.5)"
+              cornerRadius={0}
+            />
+            
+            {/* Audience area indicators */}
+            <Line
+              points={[0, 0, element.width || 800, 0]}
+              stroke="#ffffff"
+              strokeWidth={3}
+              dash={[10, 5]}
+            />
+            
+            <Line
+              points={[0, 0, 0, element.height || 400]}
+              stroke="#ffffff"
+              strokeWidth={3}
+              dash={[10, 5]}
+            />
+            
+            <Line
+              points={[element.width || 800, 0, element.width || 800, element.height || 400]}
+              stroke="#ffffff"
+              strokeWidth={3}
+              dash={[10, 5]}
+            />
+            
+            {/* Center line */}
+            <Line
+              points={[(element.width || 800) / 2, 0, (element.width || 800) / 2, element.height || 400]}
+              stroke="#ffffff"
+              strokeWidth={1}
+              dash={[5, 5]}
+              opacity={0.5}
+            />
+            
+            {/* Stage label */}
+            <Text
+              text="THRUST STAGE"
+              fontSize={20}
+              fill="#ffffff"
+              width={element.width || 800}
+              align="center"
+              y={(element.height || 400) / 2 - 10}
+              opacity={0.3}
+            />
+          </>
+        )}
+        
+        {stageType === "arena" && (
+          <>
+            {/* Arena/in-the-round stage */}
+            <Circle
+              radius={(Math.min(element.width || 800, element.height || 400)) / 2}
+              stroke="#ffffff"
+              strokeWidth={2}
+              fill="rgba(30, 30, 30, 0.5)"
+            />
+            
+            {/* Cross lines */}
+            <Line
+              points={[0, (element.height || 400) / 2, element.width || 800, (element.height || 400) / 2]}
+              stroke="#ffffff"
+              strokeWidth={1}
+              dash={[5, 5]}
+              opacity={0.5}
+            />
+            
+            <Line
+              points={[(element.width || 800) / 2, 0, (element.width || 800) / 2, element.height || 400]}
+              stroke="#ffffff"
+              strokeWidth={1}
+              dash={[5, 5]}
+              opacity={0.5}
+            />
+            
+            {/* Stage label */}
+            <Text
+              text="ARENA"
+              fontSize={20}
+              fill="#ffffff"
+              width={element.width || 800}
+              align="center"
+              y={(element.height || 400) / 2 - 10}
+              opacity={0.3}
+            />
+          </>
+        )}
+      </Group>
+      
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          boundBoxFunc={(oldBox, newBox) => {
+            // Limit resize to a certain minimum
+            if (newBox.width < 200 || newBox.height < 100) {
+              return oldBox;
+            }
+            return newBox;
+          }}
+        />
+      )}
+    </>
+  );
+};
+
 interface CanvasProps {
   projectData: ProjectData;
   selectedElementId: string | null;
@@ -428,6 +637,17 @@ export default function Canvas({
                   } else if (element.type === "gel") {
                     return (
                       <GelElement
+                        key={element.id}
+                        element={element}
+                        isSelected={isSelected}
+                        onSelect={() => handleSelectElement(element.id)}
+                        onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
+                        draggable={isDraggable}
+                      />
+                    );
+                  } else if (element.type === "stage") {
+                    return (
+                      <StageOutlineElement
                         key={element.id}
                         element={element}
                         isSelected={isSelected}
