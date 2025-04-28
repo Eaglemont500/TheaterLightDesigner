@@ -68,45 +68,94 @@ const LightElement = ({ element, isSelected, onSelect, onChange, draggable }: Ca
               ...element,
               x: node.x(),
               y: node.y(),
-              width: Math.max(5, node.width() * scaleX),
-              height: Math.max(5, node.height() * scaleY),
+              width: Math.max(40, node.width() * scaleX),
+              height: Math.max(60, node.height() * scaleY),
               rotation: node.rotation(),
             });
           }
         }}
       >
-        {/* Light fixture body */}
+        {/* Light fixture base housing */}
         <Rect
           width={element.width || 40}
-          height={element.height || 60}
-          fill="#333"
+          height={(element.height || 60) * 0.6}
+          fill="#444"
           cornerRadius={5}
+          stroke="#555"
+          strokeWidth={1}
         />
         
-        {/* Light beam */}
-        <Rect
-          width={(element.width || 40) * 0.6}
-          height={10}
-          x={(element.width || 40) * 0.2}
-          y={(element.height || 60) - 5}
+        {/* Light front housing (elliptical) */}
+        <Circle
+          radius={(element.width || 40) * 0.35}
+          x={(element.width || 40) * 0.5}
+          y={(element.height || 60) * 0.3}
+          fill="#222"
+          stroke="#666"
+          strokeWidth={1.5}
+        />
+        
+        {/* Lens */}
+        <Circle
+          radius={(element.width || 40) * 0.25}
+          x={(element.width || 40) * 0.5}
+          y={(element.height || 60) * 0.3}
           fill={lightColor}
+          opacity={0.8}
+        />
+        
+        {/* Light fixture top mounting bracket */}
+        <Rect
+          width={(element.width || 40) * 0.5}
+          height={5}
+          x={(element.width || 40) * 0.25}
+          y={0}
+          fill="#555"
           cornerRadius={2}
         />
         
-        {/* Indicator dot */}
-        <Rect
-          width={6}
-          height={6}
-          x={(element.width || 40) - 8}
-          y={(element.height || 60) - 8}
-          fill="#0D7AFF"
-          cornerRadius={3}
+        {/* C-clamp */}
+        <Circle
+          radius={5}
+          x={(element.width || 40) * 0.5}
+          y={-3}
+          fill="#777"
+          stroke="#555"
+          strokeWidth={1}
+        />
+        
+        {/* Light beam cone */}
+        <Line
+          points={[
+            (element.width || 40) * 0.5, (element.height || 60) * 0.3,
+            (element.width || 40) * 0.2, (element.height || 60),
+            (element.width || 40) * 0.8, (element.height || 60),
+            (element.width || 40) * 0.5, (element.height || 60) * 0.3
+          ]}
+          fill={lightColor}
+          closed={true}
+          opacity={0.2}
+        />
+        
+        {/* Fixture knobs */}
+        <Circle
+          radius={3}
+          x={(element.width || 40) * 0.15}
+          y={(element.height || 60) * 0.5}
+          fill="#777"
+        />
+        
+        <Circle
+          radius={3}
+          x={(element.width || 40) * 0.85}
+          y={(element.height || 60) * 0.5}
+          fill="#777"
         />
         
         {/* Label */}
         <Text
           text={lightDetails?.name || "Light"}
-          fontSize={12}
+          fontSize={11}
           fill="#fff"
           width={element.width || 40}
           align="center"
@@ -179,36 +228,63 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
               ...element,
               x: node.x(),
               y: node.y(),
-              width: Math.max(5, node.width() * scaleX),
-              height: Math.max(5, node.height() * scaleY),
+              width: Math.max(30, node.width() * scaleX),
+              height: Math.max(30, node.height() * scaleY),
               rotation: node.rotation(),
             });
           }
         }}
       >
-        {/* Gel representation */}
+        {/* Gel frame representation */}
         <Rect
           width={element.width || 30}
           height={element.height || 30}
-          fill={gelColor}
-          opacity={0.7}
-          cornerRadius={5}
+          fill="#333"
+          cornerRadius={2}
+          stroke="#555"
+          strokeWidth={1}
         />
         
-        {/* Indicator dot */}
+        {/* Gel color area */}
         <Rect
-          width={6}
-          height={6}
-          x={(element.width || 30) - 8}
-          y={(element.height || 30) - 8}
-          fill="#0D7AFF"
-          cornerRadius={3}
+          width={(element.width || 30) - 6}
+          height={(element.height || 30) - 6}
+          x={3}
+          y={3}
+          fill={gelColor}
+          opacity={0.85}
+          cornerRadius={1}
+        />
+        
+        {/* Gel frame highlights (top and left edges) */}
+        <Line
+          points={[0, 0, 0, element.height || 30, element.width || 30, element.height || 30]}
+          stroke="#222"
+          strokeWidth={1}
+        />
+        
+        {/* Gel frame highlights (bottom and right edges) */}
+        <Line
+          points={[0, 0, element.width || 30, 0, element.width || 30, element.height || 30]}
+          stroke="#666"
+          strokeWidth={1}
+        />
+        
+        {/* Gel number indicator */}
+        <Text
+          text={gelDetails?.number || ""}
+          fontSize={10}
+          fontStyle="bold"
+          fill="#fff"
+          width={element.width || 30}
+          align="center"
+          y={(element.height || 30) / 2 - 6}
         />
         
         {/* Label */}
         <Text
           text={gelDetails?.name || "Gel"}
-          fontSize={12}
+          fontSize={10}
           fill="#fff"
           width={element.width || 30}
           align="center"
