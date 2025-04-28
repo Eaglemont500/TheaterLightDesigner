@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import { 
   MousePointerIcon, 
   RotateCwIcon, 
@@ -26,7 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { nanoid } from "nanoid";
 import { type GridSettings, type Layer } from "@shared/schema";
 import { etcLights } from "@/lib/etcLights";
-import { roscoLuxGels, sortGelsByColor, sortGelsByNumber } from "@/lib/roscoLuxGels";
+import { roscoLuxGels, sortGelsByColor, sortGelsByNumber, type RoscoLuxGel } from "@/lib/roscoLuxGels";
 
 interface LeftSidebarProps {
   activeTool: "move" | "rotate" | "zoom" | "hand";
@@ -81,43 +81,54 @@ export default function LeftSidebar({
   const [gridBarSpacing, setGridBarSpacing] = useState<number>(24);
   const [gridBarDirection, setGridBarDirection] = useState<"horizontal" | "vertical">("horizontal");
   
-  // Filter assets based on search term
-  const filteredLights = etcLights.filter(light => 
-    light.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (light.manufacturer && light.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  // Filter assets based on search term - memoized for performance
+  const filteredLights = useMemo(() => {
+    return etcLights.filter(light => 
+      light.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (light.manufacturer && light.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  }, [searchTerm]);
   
-  const filteredGels = roscoLuxGels.filter(gel => 
-    gel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    gel.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    gel.number.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Memoize gel filtering to avoid recalculating on every render
+  const filteredGels = useMemo(() => {
+    return roscoLuxGels.filter(gel => 
+      gel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      gel.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      gel.number.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
   
-  // Sort gels based on sort type
-  const sortedGels = gelSortType === "color" 
-    ? filteredGels 
-    : sortGelsByNumber(filteredGels);
+  // Sort gels based on sort type - memoized
+  const sortedGels = useMemo(() => {
+    return gelSortType === "color" 
+      ? filteredGels 
+      : sortGelsByNumber(filteredGels);
+  }, [filteredGels, gelSortType]);
   
-  // Group lights by manufacturer
-  const lightManufacturers = filteredLights.reduce((acc, light) => {
-    const manufacturer = light.manufacturer || "Other";
-    if (!acc[manufacturer]) {
-      acc[manufacturer] = [];
-    }
-    acc[manufacturer].push(light);
-    return acc;
-  }, {} as Record<string, typeof etcLights>);
+  // Group lights by manufacturer - memoized
+  const lightManufacturers = useMemo(() => {
+    return filteredLights.reduce((acc, light) => {
+      const manufacturer = light.manufacturer || "Other";
+      if (!acc[manufacturer]) {
+        acc[manufacturer] = [];
+      }
+      acc[manufacturer].push(light);
+      return acc;
+    }, {} as Record<string, typeof etcLights>);
+  }, [filteredLights]);
   
-  // Group gels by category or just use the sorted list
-  const gelCategories = gelSortType === "color" 
-    ? sortedGels.reduce((acc, gel) => {
-        if (!acc[gel.category]) {
-          acc[gel.category] = [];
-        }
-        acc[gel.category].push(gel);
-        return acc;
-      }, {} as Record<string, typeof roscoLuxGels>)
-    : { "By Number": sortedGels };
+  // Group gels by category or just use the sorted list - memoized
+  const gelCategories = useMemo(() => {
+    return gelSortType === "color" 
+      ? sortedGels.reduce((acc, gel) => {
+          if (!acc[gel.category]) {
+            acc[gel.category] = [];
+          }
+          acc[gel.category].push(gel);
+          return acc;
+        }, {} as Record<string, typeof roscoLuxGels>)
+      : { "By Number": sortedGels };
+  }, [sortedGels, gelSortType]);
 
   return (
     <div id="left-sidebar" className="w-64 bg-card border-r border-border flex flex-col">

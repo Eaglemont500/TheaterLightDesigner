@@ -948,17 +948,19 @@ export default function Canvas({
                   // Background elements and grid elements should not be draggable by default
                   const isBackgroundLayer = layer.name === "Background";
                   const isGridElement = element.type === "grid";
+                  const isStageElement = element.type === "stage";
                   const isCustomGridLayer = layer.name.startsWith("Custom Grid");
                   
                   // Elements should not be draggable if:
                   // 1. The layer is locked, or
                   // 2. We're not in move mode, or
-                  // 3. It's any element in the background layer, or
-                  // 4. It's a grid element in a custom grid layer
+                  // 3. It's a grid or stage element in any layer
+                  // 4. It's any element in the background layer
                   const isDraggable = activeTool === "move" && 
                                      !layer.locked && 
-                                     !isBackgroundLayer && 
-                                     !(isCustomGridLayer && isGridElement);
+                                     !isGridElement &&
+                                     !isStageElement &&
+                                     !isBackgroundLayer;
                   
                   // Render different element types
                   if (element.type === "light") {
