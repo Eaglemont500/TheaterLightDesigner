@@ -75,8 +75,9 @@ export default function LeftSidebar({
   // Gel sorting state
   const [gelSortType, setGelSortType] = useState<"color" | "number">("color");
   
-  // Stage type state
-  const [stageType, setStageType] = useState<"proscenium" | "thrust" | "arena">("proscenium");
+  // Grid settings
+  const [gridBarSpacing, setGridBarSpacing] = useState<number>(24);
+  const [gridBarDirection, setGridBarDirection] = useState<"horizontal" | "vertical">("horizontal");
   
   // Filter assets based on search term
   const filteredLights = etcLights.filter(light => 
@@ -438,25 +439,41 @@ export default function LeftSidebar({
             </div>
             
             <div className="mb-4">
-              <h4 className="text-sm font-medium mb-2">Stage Layout</h4>
+              <h4 className="text-sm font-medium mb-2">Lighting Grid</h4>
               
               <div className="mb-3">
-                <Label htmlFor="stage-type" className="block text-sm mb-1">Stage Type</Label>
-                <Select
-                  value={stageType}
-                  onValueChange={(value: "proscenium" | "thrust" | "arena") => 
-                    setStageType(value)
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select stage type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="proscenium">Proscenium (Traditional)</SelectItem>
-                    <SelectItem value="thrust">Thrust (3/4 Round)</SelectItem>
-                    <SelectItem value="arena">Arena (In the Round)</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="grid-bar-direction" className="block text-sm mb-1">Grid Bar Direction</Label>
+                <div className="flex gap-2 mb-3">
+                  <Button 
+                    variant={gridBarDirection === "horizontal" ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setGridBarDirection("horizontal")}
+                  >
+                    Horizontal
+                  </Button>
+                  <Button 
+                    variant={gridBarDirection === "vertical" ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setGridBarDirection("vertical")}
+                  >
+                    Vertical
+                  </Button>
+                </div>
+                
+                <Label htmlFor="grid-bar-spacing" className="block text-sm mb-1">Bar Spacing (inches)</Label>
+                <div className="flex items-center space-x-2">
+                  <Slider
+                    id="grid-bar-spacing"
+                    min={6}
+                    max={48}
+                    step={6}
+                    value={[gridBarSpacing]}
+                    onValueChange={([value]) => setGridBarSpacing(value)}
+                  />
+                  <span className="text-sm font-mono w-12 text-right">{gridBarSpacing}"</span>
+                </div>
               </div>
               
               <Button 
@@ -466,15 +483,18 @@ export default function LeftSidebar({
                   
                   const newElement = {
                     id: nanoid(),
-                    type: "stage" as const,
+                    type: "grid" as const,
                     x: 100,
                     y: 100,
                     width: 800,
                     height: 400,
                     rotation: 0,
-                    assetId: "stage-outline",
+                    assetId: "lighting-grid",
                     properties: {
-                      stageType: stageType
+                      direction: gridBarDirection,
+                      spacing: gridBarSpacing,
+                      barColor: "#888888",
+                      barWidth: 2
                     },
                   };
                   
@@ -482,7 +502,7 @@ export default function LeftSidebar({
                 }}
               >
                 <PlusIcon className="h-4 w-4 mr-2" />
-                Create Stage Outline
+                Create Lighting Grid
               </Button>
             </div>
           </div>

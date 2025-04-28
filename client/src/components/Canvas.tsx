@@ -232,6 +232,146 @@ const GelElement = ({ element, isSelected, onSelect, onChange, draggable }: Canv
   );
 };
 
+// Custom component for rendering lighting grid elements
+const GridElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
+  const shapeRef = useRef<any>(null);
+  const trRef = useRef<any>(null);
+  
+  useEffect(() => {
+    if (isSelected && trRef.current) {
+      // Attach transformer
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [isSelected]);
+
+  // Get grid properties
+  const direction = element.properties?.direction || "horizontal";
+  const spacing = element.properties?.spacing || 24;
+  const barColor = element.properties?.barColor || "#888888";
+  const barWidth = element.properties?.barWidth || 2;
+  
+  // Calculate grid lines based on spacing
+  const generateGridLines = () => {
+    const width = element.width || 800;
+    const height = element.height || 400;
+    const lines = [];
+    
+    if (direction === "horizontal") {
+      // Horizontal bars
+      const numBars = Math.floor(height / spacing) + 1;
+      for (let i = 0; i < numBars; i++) {
+        const y = i * spacing;
+        if (y < height) {
+          lines.push(
+            <Line
+              key={`h-${i}`}
+              points={[0, y, width, y]}
+              stroke={barColor}
+              strokeWidth={barWidth}
+            />
+          );
+        }
+      }
+    } else {
+      // Vertical bars
+      const numBars = Math.floor(width / spacing) + 1;
+      for (let i = 0; i < numBars; i++) {
+        const x = i * spacing;
+        if (x < width) {
+          lines.push(
+            <Line
+              key={`v-${i}`}
+              points={[x, 0, x, height]}
+              stroke={barColor}
+              strokeWidth={barWidth}
+            />
+          );
+        }
+      }
+    }
+    
+    return lines;
+  };
+  
+  return (
+    <>
+      <Group
+        x={element.x}
+        y={element.y}
+        rotation={element.rotation}
+        ref={shapeRef}
+        onClick={onSelect}
+        onTap={onSelect}
+        draggable={draggable}
+        onDragEnd={(e) => {
+          onChange({
+            ...element,
+            x: e.target.x(),
+            y: e.target.y(),
+          });
+        }}
+        onTransformEnd={() => {
+          if (shapeRef.current) {
+            const node = shapeRef.current;
+            const scaleX = node.scaleX();
+            const scaleY = node.scaleY();
+            
+            // Reset scale and apply scaled width/height
+            node.scaleX(1);
+            node.scaleY(1);
+            
+            onChange({
+              ...element,
+              x: node.x(),
+              y: node.y(),
+              width: Math.max(100, node.width() * scaleX),
+              height: Math.max(100, node.height() * scaleY),
+              rotation: node.rotation(),
+            });
+          }
+        }}
+      >
+        {/* Border outline for the grid */}
+        <Rect
+          width={element.width || 800}
+          height={element.height || 400}
+          stroke={barColor}
+          strokeWidth={barWidth}
+          fill="transparent"
+        />
+        
+        {/* Grid lines */}
+        {generateGridLines()}
+        
+        {/* Grid label */}
+        <Text
+          text={`LIGHTING GRID (${spacing}" ${direction} spacing)`}
+          fontSize={14}
+          fill="#ffffff"
+          width={element.width || 800}
+          align="center"
+          y={(element.height || 400) - 20}
+          opacity={0.7}
+        />
+      </Group>
+      
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          boundBoxFunc={(oldBox, newBox) => {
+            // Limit resize to a certain minimum
+            if (newBox.width < 200 || newBox.height < 100) {
+              return oldBox;
+            }
+            return newBox;
+          }}
+        />
+      )}
+    </>
+  );
+};
+
 // Custom component for rendering stage outline elements
 const StageOutlineElement = ({ element, isSelected, onSelect, onChange, draggable }: CanvasElementProps) => {
   const shapeRef = useRef<any>(null);
@@ -637,6 +777,17 @@ export default function Canvas({
                   } else if (element.type === "gel") {
                     return (
                       <GelElement
+                        key={element.id}
+                        element={element}
+                        isSelected={isSelected}
+                        onSelect={() => handleSelectElement(element.id)}
+                        onChange={(updatedElement) => handleElementChange(updatedElement, layer.id)}
+                        draggable={isDraggable}
+                      />
+                    );
+                  } else if (element.type === "grid") {
+                    return (
+                      <GridElement
                         key={element.id}
                         element={element}
                         isSelected={isSelected}
